@@ -17,17 +17,19 @@ Meteor.methods
 
 		user = db.users.findOne({_id: Meteor.userId()}).profile
 		historyTotalTime = user.total.time
-
+		finishedProjects = db.projects.find({"projectOwner":Meteor.userId()},"completed":true).count()
 		# This will add to the time the toDate and toDate% fields for the Plan Summary
 		finalTime = _.filter timePlanSummary, (time) ->
 			onDate = _.findWhere user.summaryAmount, {name: time.name}
 			time.toDate = onDate.time
 			if (onDate.time == 0) or (historyTotalTime == 0)
 				time.percentage = 0
+				time.average = 0
 			else
 				time.percentage = ((onDate.time * 100) / historyTotalTime).toFixed(2)
+				time.average = historyTotalTime/finishedProjects
 			return time
-
+		
 		data = {
 			summaryOwner: uid
 			projectId: pid
