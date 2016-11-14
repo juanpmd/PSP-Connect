@@ -32,11 +32,9 @@ if Meteor.isServer
 
 		user = db.users.findOne({_id: Meteor.userId()}).profile
 		historyTotalTime = user.total.time
-		historyTotalInjected = user.total.injected
-		historyTotalRemoved = user.total.removed
 		finishedProjects = db.projects.find({"projectOwner": Meteor.userId()}, "completed": true).count()
 
-		# This will add to the time the toDate and toDate% fields for the Plan Summary
+		# This will add to the time the toDate
 		finalTime = _.filter timePlanSummary, (time) ->
 			onDate = _.findWhere user.summaryAmount, {name: time.name}
 			time.toDate = onDate.time
@@ -48,19 +46,13 @@ if Meteor.isServer
 		finalInjected = _.filter Injected, (injected) ->
 			onDate = _.findWhere user.summaryAmount, {name: injected.name}
 			injected.toDate = onDate.injected
-			if (onDate.injected == 0) or (historyTotalInjected == 0)
-				injected.percentage = 0
-			else
-				injected.percentage = ((onDate.injected * 100) / historyTotalInjected).toFixed(2)
+			injected.percentage = 0
 			return injected
 
 		finalRemoved = _.filter Removed, (removed) ->
 			onDate = _.findWhere user.summaryAmount, {name: removed.name}
 			removed.toDate = onDate.removed
-			if (onDate.removed == 0) or (historyTotalRemoved == 0)
-				removed.percentage = 0
-			else
-				removed.percentage = ((onDate.removed * 100) / historyTotalRemoved).toFixed(2)
+			removed.percentage = 0
 			return removed
 
 
@@ -79,6 +71,8 @@ if Meteor.isServer
 				totalSize: 0
 				estimatedTotalSize: 0
 				estimatedTime: 0
+				totalInjected: 0
+				totalRemoved: 0
 				estimatedBase: 0
 				actualBase: 0
 				estimatedAdd: 0

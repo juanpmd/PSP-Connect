@@ -195,8 +195,12 @@ Template.createDefect.events
 					console.warn(error)
 					sys.flashStatus("error-create-defect")
 				else
-					Modal.hide('createDefectModal')
-					sys.flashStatus("create-defect")
+					Meteor.call "update_defects_percentage", FlowRouter.getParam("id"), (error) ->
+						if error
+							console.warn(error)
+						else
+							Modal.hide('createDefectModal')
+							sys.flashStatus("create-defect")
 
 	'click .close-error-box': (e,t) ->
 		t.errorState.set(0)

@@ -8,6 +8,8 @@ Meteor.methods
 			userStages = db.users.findOne({_id: Meteor.userId()})?.profile.summaryAmount
 			planSummary = db.plan_summary.findOne({"projectId": data.projectId})
 
+			newInjected = planSummary.total.totalInjected+1
+			newRemoved = planSummary.total.totalRemoved+1
 			injectedValues = []
 			removedValues = []
 			_.each userStages, (stage) ->
@@ -27,7 +29,7 @@ Meteor.methods
 					removedValues.push({'name': stage.name, 'removed': removedStage.removed, "toDate": removedStage.toDate, "percentage": removedStage.percentage})
 
 
-			db.plan_summary.update({'projectId': data.projectId}, {$set: {'injectedEstimated': injectedValues, 'removedEstimated': removedValues}})
+			db.plan_summary.update({'projectId': data.projectId}, {$set: {'injectedEstimated': injectedValues, 'removedEstimated': removedValues, 'total.totalInjected':newInjected, 'total.totalRemoved':newRemoved}})
 
 		db.defects.insert(data)
 
@@ -61,6 +63,26 @@ Meteor.methods
 			db.plan_summary.update({'projectId': data.projectId}, {$set: {'injectedEstimated': injectedValues, 'removedEstimated': removedValues}})
 
 
+	update_defects_percentage: (projectId)->
+		planSummary = db.plan_summary.findOne({"projectId":projectId,"summaryOwner": Meteor.userId()})
+		totalInjected = planSummary.total.totalInjected
+		totalRemoved = planSummary.total.totalRemoved
+		totalTime = planSummary.total.totalTime
+		stagesInjected = planSummary.injectedEstimated
+		stagesRemoved = planSummary.removedEstimated
+
+		_.each stagesInjected, (stage)->
+			stage.percentage = parseInt(((stage.injected*100)/totalInjected))
+
+		_.each stagesRemoved, (stage)->
+			stage.percentage = parseInt(((stage.removed*100)/totalRemoved))
+
+		data = {
+			"injectedEstimated":stagesInjected
+			"removedEstimated":stagesRemoved
+		}
+		db.plan_summary.update({ "projectId":projectId }, {$set: data })
+	
 	delete_defect: (defectId, pid) ->
 		syssrv.deleteDefect(defectId, pid)
 
