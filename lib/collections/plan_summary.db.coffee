@@ -206,6 +206,14 @@ schemas.totalValues = new SimpleSchema
 		type: Number
 		label: "Estimated time the user gave for the project completion"
 
+	"totalInjected":
+		type: Number
+		label: "Injected defects in this project"
+
+	"totalRemoved":
+		type: Number
+		label: "Removed defects in this project"
+
 	"estimatedBase":
 		type: Number
 		label: "Estimated base LOC"
@@ -253,9 +261,11 @@ schemas.totalValues = new SimpleSchema
 	"proxyEstimated":
 		type: Number
 		label: "Estimated proxy size"
+
 	"productivityPlan": 
 		type: Number
 		label: "Planned productivity of the project (A&M/totalTime)*60"
+
 	"productivityActual":
 		type: Number
 		label: "Actual productivity of the project (A&M/totalTime)*60"

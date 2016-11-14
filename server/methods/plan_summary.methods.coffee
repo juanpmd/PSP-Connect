@@ -282,7 +282,7 @@ Meteor.methods
 					"total.actualModified":value
 				}
 			when "actualReused"
-				total = planSummary.total.actualBase + planSummary.total.actualAdd + planSummary.total.actualDeleted + value
+				total = planSummary.total.actualBase + planSummary.total.actualAdd - planSummary.total.actualDeleted + value
 
 				data = {
 					"total.actualReused":value

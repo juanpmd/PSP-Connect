@@ -8,9 +8,12 @@ if Meteor.isServer
 		injectedValues = planSummary.injectedEstimated
 		removedValues = planSummary.removedEstimated
 
+		newInjected = planSummary.total.totalInjected-1
+		newRemoved = planSummary.total.totalRemoved-1
+
 		(_.findWhere injectedValues, {'name': defect.injected}).injected -= 1
 		(_.findWhere removedValues, {'name': defect.removed}).removed -= 1
-		db.plan_summary.update({'projectId': projectId}, {$set: {'injectedEstimated': injectedValues, 'removedEstimated': removedValues}})
+		db.plan_summary.update({'projectId': projectId}, {$set: {'injectedEstimated': injectedValues, 'removedEstimated': removedValues, 'total.totalInjected':newInjected, 'total.totalRemoved':newRemoved}})
 
 		# Deletes the defect completely
 		db.defects.remove({_id: defectId})
