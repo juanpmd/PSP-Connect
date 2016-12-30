@@ -174,7 +174,7 @@ Template.headerNavigation.helpers
 		else
 			displayMenu = false
 
-		if currentState == "projects" or currentState=="projectGeneral" or currentState=="projectTimeLog" or currentState=="projectDefectLog" or currentState=="projectSummary" or currentState=="projectScripts" or currentState=="estimatingtemplate" or currentState=="forms"
+		if currentState == "projects" or currentState=="projectGeneral" or currentState=="projectTimeLog" or currentState=="projectDefectLog" or currentState=="projectSummary" or currentState=="projectScripts" or currentState=="estimatingtemplate" or currentState=="forms" or currentState=="pqitemplate"
 			initialRoute = "projects"
 		else if currentState == "community" or currentState == "community-question" or currentState == "help-tutorial"
 			initialRoute = "help"
